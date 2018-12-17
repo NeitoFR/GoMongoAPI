@@ -1,0 +1,32 @@
+{
+    "maquette_Name": "CESI",
+    "room_List": [{
+            "room_Name": "Salon",
+            "ESP_List": [{
+                "ESP_Model": "ESP32",
+                "Firmware_Version": "v1.16e",
+                "ESP_IP": "192.168.20.1",
+                "MAC_ADRESS":"c8:14:ae:56:9f",
+                "ESP_Hostname": "astora",
+                "hotspot_Name": "CESI_Hotspot",
+                "components_List": [{
+                        "com_Description": "LED du salon",
+                        "com_Name": "LED_SALON",
+                        "com_Type":"LED",
+                        "com_Model": "LED_RGB",
+                        "value_Type": "none",
+                        "send_Rate": "none"
+                    },
+                    {
+                        "com_Description": "TEMP du salon",
+                        "com_Name": "TEMP_Salon",
+                        "com_Type":"TEMP",
+                        "com_Model": "DHT22",
+                        "value_Type": "float",
+                        "send_Rate": "2s"
+                    }
+                ]
+            }]
+        }
+    ]
+}

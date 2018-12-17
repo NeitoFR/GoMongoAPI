@@ -1,0 +1,17 @@
+version: "3"
+
+services :
+  go_dev: 
+    container_name: go_dev
+    hostname: go_dev
+    build: ./
+    volumes: 
+        - ./app:/app
+    working_dir: /app
+    ports: 
+      - 3500:3500  
+    stdin_open: true  
+
+networks:
+  default:
+    driver: bridge

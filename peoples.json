@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Willem",
+    "age": 12,
+    "friends": ["Willem"]
+  },
+  {
+    "name": "Sarah",
+    "age": 100,
+    "friends": ["Willem"]
+  },
+  {
+    "name": "Anissa",
+    "age": 19,
+    "friends": ["Willem"]
+  },
+  {
+    "name": "Remy",
+    "age": 54,
+    "friends": ["Willem"]
+  },
+  {
+    "name": "Mimi",
+    "age": 589,
+    "friends": ["Willem"]
+  },
+  {
+    "name": "Sam",
+    "age": 1232,
+    "friends": ["Willem"]
+  }
+]
