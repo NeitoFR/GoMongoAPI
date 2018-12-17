@@ -1,16 +1,44 @@
 version: "3"
 
 services :
-  go_dev: 
-    container_name: go_dev
-    hostname: go_dev
-    build: ./
+  go_api: 
+    container_name: go_api
+    hostname: go_api
+    build: ./go_api
     volumes: 
-        - ./app:/app
+        - ./go_api/app:/app
     working_dir: /app
     ports: 
       - 3500:3500  
     stdin_open: true  
+    environment: 
+      
+
+  mqtt_api: 
+    container_name: mqtt_api
+    hostname: mqtt_api
+    build: ./mqtt_api
+    volumes: 
+        - ./mqtt_api/app:/app
+    working_dir: /app
+    ports: 
+      - 3501:3501
+    stdin_open: true 
+    environment: 
+      
+
+  passport_checker:
+    container_name: passport_checker
+      hostname: passport_checker
+      build: ./passport_checker/passport_checker
+      volumes: 
+          - ./app:/app
+      working_dir: /app
+      ports: 
+        - 3502:3502
+      stdin_open: true 
+      environment: 
+        
 
 networks:
   default:
