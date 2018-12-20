@@ -5,6 +5,8 @@
       "room_Name": "Salon",
       "esp_List": [
         {
+          "room_Name": "Salon",
+          "model_Name": "CESI",
           "esp_Model": "ESP32",
           "sdk_Version": "V1.16e",
           "esp_IP": "192.168.20.1",

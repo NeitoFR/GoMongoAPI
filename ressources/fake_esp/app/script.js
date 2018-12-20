@@ -1,7 +1,9 @@
 const mqtt = require("mqtt");
 
 require("dotenv").config();
-const json_passport = require("/data/iot_passport_example.json");
+const json_passport = require("/data/iot_passport_example.json"),
+  sub_topic = json_passport.model_Name + "/" + process.env.question_topic,
+  pub_topic = json_passport.model_Name + "/" + process.env.answer_topic;
 
 var client = mqtt.connect(
   "mqtt://" + process.env.mqtt_host + ":" + process.env.mqtt_port
@@ -9,7 +11,7 @@ var client = mqtt.connect(
 
 client.on("connect", function() {
   console.log("Connected to MQTT");
-  client.subscribe(process.env.question_topic, err => {
+  client.subscribe(sub_topic, err => {
     if (err) throw err;
     console.log("Subscribed to topic", process.env.question_topic);
   });
@@ -19,7 +21,7 @@ client.on("message", (topic, message) => {
   console.log("[" + topic + "] : " + message);
 
   switch (topic) {
-    case process.env.question_topic:
+    case sub_topic:
       if (message == "ASK") _sendPassport();
       break;
 
@@ -34,6 +36,6 @@ client.on("message", (topic, message) => {
 });
 
 function _sendPassport() {
-  client.publish(process.env.answer_topic, JSON.stringify(json_passport));
+  client.publish(pub_topic, JSON.stringify(json_passport));
   console.log("Passport sent");
 }
