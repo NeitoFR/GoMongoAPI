@@ -37,7 +37,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 	log.Println(keys)
 }
 func main() {
-	godotenv.Load("./mongo.env")
+	godotenv.Load("./.env")
 	_initMongoConnection(mongoInfo{os.Getenv("mongo_url"), os.Getenv("mongo_db"), os.Getenv("mongo_col")})
 
 	router := mux.NewRouter()

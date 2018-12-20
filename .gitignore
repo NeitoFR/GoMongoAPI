@@ -1,1 +1,3 @@
 /tools
+*/**/package-*
+*/**/node_modules

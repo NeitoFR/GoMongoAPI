@@ -1,0 +1,28 @@
+{
+  "esp_Model": "ESP32",
+  "sdk_Version": "V1.16e",
+  "esp_IP": "192.168.20.1",
+  "mac_address": "c8:14:ae:56:9f",
+  "firmware_Version": "V1.0",
+  "free_Space": "200 Mo",
+  "esp_Hostname": "astora",
+  "hotspot_Name": "CESI_Hotspot",
+  "components_List": [
+    {
+      "com_Description": "LED du salon",
+      "com_Name": "LED_SALON",
+      "com_Type": "LED",
+      "com_Model": "LED_RGB",
+      "value_Type": "none",
+      "send_Rate": "none"
+    },
+    {
+      "com_Description": "TEMP du salon",
+      "com_Name": "TEMP_Salon",
+      "com_Type": "TEMP",
+      "com_Model": "DHT22",
+      "value_Type": "float",
+      "send_Rate": "2s"
+    }
+  ]
+}

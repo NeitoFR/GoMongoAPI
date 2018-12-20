@@ -26,7 +26,7 @@ func _initMongoConnection(info mongoInfo) {
 		panic(err)
 	}
 	col = conn.DB(info.db_name).C(info.col_name)
-	log.Println("Connection to the mongo instance OK : \nMongo URL : " + info.url + "\nDatabase Name :" + info.db_name + "\nCollection Name : " + info.col_name)
+	log.Println("Connection to the mongo instance OK : \nMongo URL : " + info.url + "\nDatabase Name : " + info.db_name + "\nCollection Name : " + info.col_name)
 }
 
 func _getPassports(a url.Values) (string, error) {

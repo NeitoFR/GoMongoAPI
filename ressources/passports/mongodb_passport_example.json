@@ -1,0 +1,45 @@
+{
+  "model_Name": "CESI",
+  "room_List": [
+    {
+      "room_Name": "Salon",
+      "esp_List": [
+        {
+          "esp_IP": "192.168.20.1",
+          "mac_address": "43:54:55:77:8D:2D",
+          "esp_Hostname": "astora"
+        }
+      ]
+    },
+    {
+      "room_Name": "Chambre",
+      "esp_List": [
+        {
+          "esp_IP": "192.168.20.2",
+          "mac_address": "0D:1E:A7:9E:CD:D9",
+          "esp_Hostname": "anor_londo"
+        }
+      ]
+    },
+    {
+      "room_Name": "Cuisine",
+      "esp_List": [
+        {
+          "esp_IP": "192.168.20.3",
+          "mac_address": "40:F6:29:D0:1B:72",
+          "esp_Hostname": "tristram"
+        }
+      ]
+    },
+    {
+      "room_Name": "Hall d'entrée",
+      "esp_List": [
+        {
+          "esp_IP": "192.168.20.3",
+          "mac_address": "40:F6:29:D0:1B:72",
+          "esp_Hostname": "ravenholm"
+        }
+      ]
+    }
+  ]
+}

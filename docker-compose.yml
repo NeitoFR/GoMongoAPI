@@ -1,42 +1,57 @@
 version: "3"
 
-services :
+services:
   passport_checker:
     container_name: passport_checker
-      hostname: passport_checker
-      build: ./passport_checker/passport_checker
-      volumes: 
-          - ./app:/app
-      working_dir: /app
-      ports: 
-        - 3500:3500  
-      stdin_open: true 
-      environment: 
-
-  go_api: 
-    container_name: go_api
-    hostname: go_api
-    build: ./go_api
-    volumes: 
-        - ./go_api/app:/app
+    hostname: passport_checker
+    build: ./passport_checker
+    volumes:
+      - ./passport_checker/app:/app
     working_dir: /app
-    ports: 
-      - 3501:3501
-    stdin_open: true  
-    environment: 
+    ports:
+      - 3500:3500
+    stdin_open: true
 
-  mqtt_api: 
+  mongo_api:
+    container_name: mongo_api
+    hostname: mongo_api
+    build: ./mongo_api
+    volumes:
+      - ./mongo_api/app:/app
+    working_dir: /app
+    ports:
+      - 3501:3501
+    stdin_open: true
+
+  mqtt_api:
     container_name: mqtt_api
     hostname: mqtt_api
     build: ./mqtt_api
-    volumes: 
-        - ./mqtt_api/app:/app
+    volumes:
+      - ./mqtt_api/app:/app
     working_dir: /app
-    ports: 
+    ports:
       - 3502:3502
-    stdin_open: true 
-    environment: 
+    stdin_open: true
 
+  fake_esp:
+    container_name: fake_esp
+    hostname: fake_esp
+    build: ./ressources/fake_esp
+    environment:
+      - http_proxy
+      - https_proxy
+
+  mqtt_server:
+    container_name: mqtt_server
+    image: eclipse-mosquitto:1.5.4
+    ports:
+      - "3503:1883"
+      - "3504:9001"
+    # volumes:
+    #   - "./data/mqtt/data:/mosquitto/data"
+    #   - "./data/mqtt/log:/mosquitto/log"
+    #   - "./services/mqtt_server/config:/mosquitto/config"
 networks:
   default:
     driver: bridge
