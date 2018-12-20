@@ -18,7 +18,7 @@ func AskPassportsRoute(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Form.Get("model_Name") == "" {
 		log.Println("no name")
-		fmt.Fprintln(w, "{\"error\": \"Model Name required in query parameters\"}")
+		fmt.Fprintln(w, "{\"error\": \"model_Name required in query parameters\"}")
 	} else {
 
 		res, err := _askMqttPassports(r.Form.Get("model_Name"))

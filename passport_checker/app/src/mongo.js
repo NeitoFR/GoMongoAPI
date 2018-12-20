@@ -2,10 +2,9 @@ const w = require("winston"),
   http = require("http");
 
 module.exports = {
-  getPassport: function(callback) {
-    w.info("Getting mongodb passport");
-    w.info(process.env);
-    // TODO : Implement MongoDB call
+  getPassport: function (name, callback) {
+    w.info("Getting MongoDB passport for model : " + name);
+    var path = "/passports?model_Name=" + name
     http
       .get(
         {
@@ -19,16 +18,18 @@ module.exports = {
             body += chunk;
           });
           res.on("end", () => {
+            console.log('Req ended message is', body);
+
             try {
               var passport = JSON.parse(body);
               //TODO What if you get an array ?
-              delete passport._id;
+              if (passport._id) delete passport._id;
             } catch (e) {
               w.info(
                 "Cannot parse the response from : " +
-                  process.env.mongo_api_host +
-                  " | error  : " +
-                  e
+                process.env.mongo_api_host +
+                " | error  : " +
+                e
               );
             }
             callback(passport);
@@ -39,9 +40,9 @@ module.exports = {
       .on("error", err => {
         w.info(
           "Error getting passport from : " +
-            process.env.mongo_api_host +
-            " : " +
-            err
+          process.env.mongo_api_host +
+          " : " +
+          err
         );
       });
   }

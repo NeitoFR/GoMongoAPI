@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/yosssi/gmq/mqtt"
-
 	"github.com/yosssi/gmq/mqtt/client"
 )
 
@@ -15,8 +14,10 @@ type mqttInfo struct {
 	port string
 }
 
+var cli *client.Client
+
 func _initMqttConnection(info mqttInfo) {
-	cli := client.New(&client.Options{
+	cli = client.New(&client.Options{
 		ErrorHandler: func(err error) {
 			fmt.Println(err)
 		},
@@ -41,6 +42,7 @@ func _initMqttConnection(info mqttInfo) {
 				QoS:         mqtt.QoS0,
 				// Define the processing of the message handler.
 				Handler: func(topicName, message []byte) {
+					log.Println("Got message !")
 					fmt.Println(string(topicName), string(message))
 				},
 			},
@@ -54,7 +56,17 @@ func _initMqttConnection(info mqttInfo) {
 func _askMqttPassports(name string) (string, error) {
 	var err error = nil
 	// topic := buildAskTopicName(name, os.Getenv("question_topic"))
-	topic := string([]byte(name + "/" + os.Getenv("question_topic")))
-	log.Println(topic)
+	topic := []byte(name + "/" + os.Getenv("question_topic"))
+
+	// Publish a message.
+	err = cli.Publish(&client.PublishOptions{
+		QoS:       mqtt.QoS0,
+		TopicName: topic,
+		Message:   []byte("ASK"),
+	})
+	if err != nil {
+		panic(err)
+	}
+	log.Println("ask for passport sent to mqtt")
 	return "", err
 }

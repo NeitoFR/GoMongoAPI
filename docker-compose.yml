@@ -48,10 +48,15 @@ services:
     ports:
       - "3503:1883"
       - "3504:9001"
-    # volumes:
-    #   - "./data/mqtt/data:/mosquitto/data"
-    #   - "./data/mqtt/log:/mosquitto/log"
-    #   - "./services/mqtt_server/config:/mosquitto/config"
+      
+  mongodb:
+    container_name: mongodb
+    hostname: mongodb
+    image: 'mongo:4.1'
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db
 networks:
   default:
     driver: bridge

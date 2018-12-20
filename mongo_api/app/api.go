@@ -22,6 +22,7 @@ func GetAllRoute(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting passport", err)
 		fmt.Fprintln(w, err)
 	}
+	log.Println("Got passport" + string(res))
 	fmt.Fprintln(w, res)
 }
 

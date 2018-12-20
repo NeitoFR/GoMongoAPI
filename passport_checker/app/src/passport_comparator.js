@@ -6,9 +6,11 @@ w = require("winston");
 
 module.exports = {
   comparePassports: function(pMqtt, pMongo, callback) {
-    //TODO Implement passport concatenation and comparaisonrs
-    w.info(JSON.stringify());
-    w.info(pMongo + pMqtt);
-    callback(JSON.stringify(pMongo) + JSON.stringify(pMqtt));
+    var final = {
+      "MongoDB_Passport": pMongo,
+      "MQTT_Passport": pMqtt || "none yet"
+    }
+    //TODO Implement passport concatenation and comparaison
+    callback(final);
   }
 };
