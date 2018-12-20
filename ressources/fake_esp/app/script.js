@@ -13,7 +13,7 @@ client.on("connect", function() {
   console.log("Connected to MQTT");
   client.subscribe(sub_topic, err => {
     if (err) throw err;
-    console.log("Subscribed to topic", process.env.question_topic);
+    console.log("Subscribed to topic", sub_topic);
   });
 });
 
