@@ -18,7 +18,7 @@ module.exports = {
             body += chunk;
           });
           res.on("end", () => {
-            console.log("Req ended message is", body);
+            //console.log("Req ended message is", body);
             try {
               var passport = JSON.parse(body);
               //TODO What if you get an array ?

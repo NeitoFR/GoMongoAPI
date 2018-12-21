@@ -13,19 +13,21 @@ w.add(
     format: w.format.simple()
   })
 );
-
-app.get("/hello", function (req, res) {
+mqtt_helper._initWebSocketClient();
+app.get("/hello", function(req, res) {
   res.send("Hello from passport_checker").end();
 });
 
-app.get("/passports", function (req, res) {
-  w.info("************* New Request *************")
-  console.log("Requested passport checking for model : "+ req.query.model_Name);
-  
+app.get("/passports", function(req, res) {
+  w.info("************* New Request *************");
+  console.log(
+    "Requested passport checking for model : " + req.query.model_Name
+  );
+
   if (req.query.model_Name == undefined || "")
     res.send('{"error":"model_Name required in query parameters"}').end();
   else {
-    var name = req.query.model_Name
+    var name = req.query.model_Name;
 
     var mqtt_passport, mongo_passport;
     w.info("Checking passort");
@@ -33,28 +35,27 @@ app.get("/passports", function (req, res) {
 
     function comparePassports() {
       w.info("Got the 2 passports" + mqtt_passport + mongo_passport);
-      compartor.comparePassports(mqtt_passport, mongo_passport, function (str) {
+      compartor.comparePassports(mqtt_passport, mongo_passport, function(str) {
         w.info("Comparaison finished");
         res.send(str).end();
-        w.info("************* End of Request *************")
-
+        w.info("************* End of Request *************");
       });
     }
 
-    mqtt_helper.getPassport(name, (str) => {
+    mqtt_helper.getPassport(name, str => {
       mqtt_passport = str;
       w.info("Got MQTT passport" + JSON.stringify(str));
       passort_loaded();
     });
 
-    mongo_helper.getPassport(name, (str) => {
+    mongo_helper.getPassport(name, str => {
       mongo_passport = str;
-      w.info("Got MongoDB passport" + JSON.stringify(str));
+      // w.info("Got MongoDB passport" + JSON.stringify(str));
       passort_loaded();
     });
   }
 });
 
 app.listen(process.env.port, () => {
-  w.info("Example app listening on port : " + process.env.port);
+  w.info("Passport Checker listening on port : " + process.env.port);
 });

@@ -1,56 +1,41 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/graarh/golang-socketio/transport"
+
+	gosocketio "github.com/graarh/golang-socketio"
 	"github.com/joho/godotenv"
 )
 
-func AskPassportsRoute(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Println("Error parsing URL", err)
-		panic(err)
-	}
-	if r.Form.Get("model_Name") == "" {
-		log.Println("no name")
-		fmt.Fprintln(w, "{\"error\": \"model_Name required in query parameters\"}")
-	} else {
-
-		res, err := _askMqttPassports(r.Form.Get("model_Name"))
-
-		if err != nil {
-			log.Println("Error getting passport", err)
-			fmt.Fprintln(w, err)
-		}
-		fmt.Fprintln(w, res)
-	}
+// var server *gosocketio.Server
+type WsData struct {
+	Data string
 }
 
-func test(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	m := r.Form
-	log.Println(m)
-
-	keys := make([]string, len(r.Form))
-	for key, _ := range r.Form {
-		keys = append(keys, key)
-	}
-	log.Println(keys)
+func _initSocketServer() {
+	server := gosocketio.NewServer(transport.GetDefaultWebsocketTransport())
+	server.On(gosocketio.OnConnection, func(c *gosocketio.Channel) {
+		log.Println("New client connected")
+		c.Emit("hello", WsData{"Struct data"})
+	})
+	server.On("ask_passport", func(c *gosocketio.Channel, msg WsData) string {
+		//send event to all in room
+		log.Println("Message : " + msg.Data)
+		return "OK"
+	})
+	serveMux := http.NewServeMux()
+	serveMux.Handle("/ws", server)
+	log.Println("Listening on port : " + os.Getenv("socket_server_port"))
+	log.Panic(http.ListenAndServe(":"+os.Getenv("socket_server_port"), serveMux))
 }
+
 func main() {
 	godotenv.Load("./.env")
 
 	_initMqttConnection(mqttInfo{os.Getenv("mqtt_server"), os.Getenv("mqtt_port")})
-
-	router := mux.NewRouter()
-	router.HandleFunc("/passports", AskPassportsRoute).Methods("GET")
-	router.HandleFunc("/test", test).Methods("GET")
-
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), router))
-	log.Println("Listening on port : " + os.Getenv("port"))
+	_initSocketServer()
 }
