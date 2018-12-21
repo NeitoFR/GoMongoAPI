@@ -48,15 +48,19 @@ services:
     ports:
       - "3503:1883"
       - "3504:9001"
-      
+
   mongodb:
     container_name: mongodb
     hostname: mongodb
-    image: 'mongo:4.1'
+    image: "mongo:4.1"
     ports:
       - "27017:27017"
     volumes:
-      - ./data/mongo:/data/db
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+
 networks:
   default:
     driver: bridge
