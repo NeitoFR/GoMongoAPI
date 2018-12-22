@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"net/url"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -28,15 +29,23 @@ func _initMongoConnection(info mongoInfo) {
 	log.Println("Connection to the mongo instance OK : \nMongo URL : " + info.url + "\nDatabase Name : " + info.db_name + "\nCollection Name : " + info.col_name)
 }
 
-func _getPassports(name string) (string, error) {
+func _getPassports(a url.Values) (string, error) {
 	var data bson.M
 	var err error = nil
-	log.Println("Getting passport for model : " + name)
 
-	err = col.Find(bson.M{"model_Name": name}).One(&data)
-
+	if len(a) > 0 {
+		keys := make([]string, len(a))
+		for key, _ := range a {
+			keys = append(keys, key)
+		}
+		log.Println(keys, a, len(a))
+		// #TODO Parse url.Values with the $and operator and do a filtered Find() query
+		err = col.Find(bson.M{}).One(&data)
+	} else {
+		err = col.Find(bson.M{}).One(&data)
+	}
 	if err != nil {
-		// log.Println("Error getting passport", err)
+		log.Println("Error getting passports", err)
 		return "", err
 	}
 	toByte, err := json.Marshal(data)
@@ -44,6 +53,6 @@ func _getPassports(name string) (string, error) {
 		log.Println("Error converting bson to byte[] ", err)
 		return "", err
 	}
-	log.Println("MongoDB Query result : " + string(toByte[:len(toByte)]))
+
 	return string(toByte[:len(toByte)]), err
 }

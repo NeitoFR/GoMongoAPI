@@ -12,18 +12,26 @@ import (
 
 func GetAllRoute(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
+
 	if err != nil {
 		log.Println("Error parsing URL", err)
 		panic(err)
 	}
-	res, err := _getPassports(r.Form)
-
-	if err != nil {
-		log.Println("Error getting passport", err)
-		fmt.Fprintln(w, err)
+	if r.Form.Get("model_Name") == "" {
+		log.Println("Error, no model name")
+		fmt.Fprintln(w, "{\"error\": \"model_Name required in query parameters\"}")
+		return
+	} else {
+		// log.Println("Getting passport for model : " + r.Form.Get("model_Name"))
+		res, err := _getPassports(r.Form.Get("model_Name"))
+		if err != nil {
+			log.Println("Error getting passport for model name : "+r.Form.Get("model_Name"), err)
+			fmt.Fprintln(w, "{\"error\": \"Error getting passport for model name : "+r.Form.Get("model_Name")+"\"}")
+			return
+		}
+		log.Println("Passport found for model : " + r.Form.Get("model_Name"))
+		fmt.Fprintln(w, res)
 	}
-	log.Println("Got passport" + string(res))
-	fmt.Fprintln(w, res)
 }
 
 func test(w http.ResponseWriter, r *http.Request) {
