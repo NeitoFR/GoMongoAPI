@@ -1,54 +1,59 @@
-const w = require("winston"),
-  io = require("socket.io-client");
-//   WebSocket = require("ws");
-// var ws;
-
-// w.add(new w.transports.Console({
-//     format: w.format.simple()
-// }));
-
+const w = require("winston");
+mqtt = require('mqtt')
+var client = null;
+var passport_temp = [],
+  ongoing_request = false;
 module.exports = {
-  _initWebSocketClient: function() {
-    var socket = io("ws://mqtt_api/ws", { transports: ["websocket"] });
-    // w.info("Trying to connect to websocket");
-    // var host =
-    //   "ws://" +
-    //   process.env.mqtt_api_host +
-    //   ":" +
-    //   process.env.mqtt_api_port +
-    //   "/ws?EIO=3&transport=websocket";
-    // ws = new WebSocket(host);
-    // ws.on("open", () => {
-    //   console.log(
-    //     "Connected to WebSocket Server",
-    //     process.env.mqtt_api_host + ":" + process.env.mqtt_api_port
-    //   );
-    //   ws.send('["ask_passport", { Data: "Data test" }]');
-    // });
-    // ws.on("message", data => {
-    //   console.log("message from go", data);
-    // });
+  _initMqttConnexion: function () {
+    client = mqtt.connect(
+      "mqtt://" + process.env.mqtt_host + ":" + process.env.mqtt_port
+    );
+
+    client.on("connect", function () {
+      w.info("Connected to MQTT");
+      var topic = "+/" + process.env.answer_topic
+      client.subscribe(topic, err => {
+        if (err) throw err;
+        w.info("Subscribed to topic : " + topic);
+      });
+    });
+    client.on("message", (topic, message) => {
+      w.info("[" + topic + "] : " + message + "\n*************************\n");
+      if (ongoing_request && _checkTopic(topic)) {
+        w.info('topic check ok')
+        try {
+          var passport = JSON.parse(message)
+          passport_temp.push(passport)
+        } catch (error) {
+          passport_temp.push({ error: "Can't parse mqtt response : " + error })
+        }
+      }
+      else {
+        passport_temp = { "error": "improper topic" }
+
+      }
+    })
   },
-  getPassport: function(name, callback) {
+  getPassport: function (name, callback) {
     w.info("Getting MQTT passport for model : " + name);
-
-    // var host =
-    //   "http://" +
-    //   process.env.mqtt_api_host +
-    //   ":" +
-    //   process.env.mqtt_api_port +
-    //   "/";
-    // var socket = io.connect(
-    //   process.env.mqtt_api_host,
-    //   { port: 3502, path: "/" }
-    // );
-    // w.info("Trying to connect to", host);
-
-    // socket.on("connect", () => {
-    //   w.info("Connected to Go MQTT_API");
-    // });
-    // socket.on("hello", msg => {
-    //   w.info("Message from go server: " + msg);
-    // });
+    ongoing_request = true;
+    var topic = name + "/" + process.env.question_topic
+    client.publish(topic, "ASK")
+    setTimeout(() => {
+      w.info((process.env.mqtt_timeout / 1000) + " seconds have passed, " + (passport_temp.length || 0) + " passport(s) received")
+      callback(passport_temp)
+      passport_temp.length = 0;
+      ongoing_request = false;
+    }, process.env.mqtt_timeout || 5000);
   }
 };
+
+function _checkTopic(topic) {
+  w.info("checking topic : " + topic)
+  var temp = topic.split("/");
+  w.info("topic parts" + temp.length + temp)
+  w.info(temp[temp.length - 1] + " = " + process.env.answer_topic + " ? " + (temp[temp.length] === process.env.answer_topic))
+  w.info(temp.length + " = " + 2 + " ? " + (temp.length === 2))
+
+  return temp[temp.length - 1] === process.env.answer_topic && temp.length === 2 ? true : false
+}

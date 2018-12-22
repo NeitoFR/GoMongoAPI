@@ -13,7 +13,7 @@ w.add(
     format: w.format.simple()
   })
 );
-mqtt_helper._initWebSocketClient();
+mqtt_helper._initMqttConnexion();
 app.get("/hello", function (req, res) {
   res.send("Hello from passport_checker").end();
 });
@@ -35,8 +35,8 @@ app.get("/passports", function (req, res) {
     var passort_loaded = _.after(2, comparePassports);
 
     function comparePassports() {
-      w.info("Got the 2 passports" + mqtt_passport + mongo_passport);
-      compartor.comparePassports(mqtt_passport, mongo_passport, function (str) {
+      w.info("Got the response from MQTT and MongoDB : " + response_from_mqtt + response_from_mongo);
+      compartor.comparePassports(response_from_mqtt, response_from_mongo, function (str) {
         w.info("Comparaison finished");
         res.send(str).end();
         w.info("************* End of Request *************");
