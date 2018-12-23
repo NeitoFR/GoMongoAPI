@@ -19,7 +19,7 @@ app.get("/hello", function (req, res) {
 });
 
 app.get("/passports", function (req, res) {
-  w.info("************* New Request *************");
+  w.info("********** New Request **********");
   if (req.query.model_Name == undefined || ""){
     w.info("model_Name missing in query parameters")
     res.send('{"error":"model_Name required in query parameters"}').end();
@@ -36,10 +36,10 @@ app.get("/passports", function (req, res) {
 
     function comparePassports() {
       w.info("Got the response from MQTT and MongoDB : " + response_from_mqtt + response_from_mongo);
-      compartor.comparePassports(response_from_mqtt, response_from_mongo, function (str) {
-        w.info("Comparaison finished");
+      compartor.comparePassports(req.query.model_Name, response_from_mqtt, response_from_mongo, function (str) {
+        w.info("********** Comparaison finished **********");
         res.send(str).end();
-        w.info("************* End of Request *************");
+        w.info("********** End of Request **********");
       });
     }
 

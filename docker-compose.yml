@@ -42,6 +42,22 @@ services:
       - http_proxy
       - https_proxy
 
+  fake_esp:
+    container_name: fake_esp
+    hostname: fake_esp
+    build: ./ressources/fake_esp
+    environment:
+      - http_proxy
+      - https_proxy
+
+  fake_esp_2:
+    container_name: fake_esp_2
+    hostname: fake_esp_2
+    build: ./ressources/fake_esp_2
+    environment:
+      - http_proxy
+      - https_proxy
+
   mqtt_server:
     container_name: mqtt_server
     image: eclipse-mosquitto:1.5.4

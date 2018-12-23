@@ -1,13 +1,13 @@
 {
-  "room_Name": "Salon",
+  "room_Name": "Chambre",
   "model_Name": "CESI",
   "esp_Model": "ESP32",
   "sdk_Version": "V1.16e",
-  "esp_IP": "192.168.20.1",
-  "mac_address": "43:54:55:77:8D:2D",
+  "esp_IP": "192.168.20.7",
+  "mac_address": "0D:1E:A7:9E:CD:D9",
   "firmware_Version": "V1.0",
   "free_Space": "200 Mo",
-  "esp_Hostname": "astora",
+  "esp_Hostname": "anor_londo",
   "hotspot_Name": "CESI_Hotspot",
   "components_List": [
     {

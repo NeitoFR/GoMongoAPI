@@ -3,6 +3,7 @@ mqtt = require('mqtt')
 var client = null;
 var passport_temp = [],
   ongoing_request = false;
+  //TODO Implement simultaneous request form 2 different model
 module.exports = {
   _initMqttConnexion: function () {
     client = mqtt.connect(
